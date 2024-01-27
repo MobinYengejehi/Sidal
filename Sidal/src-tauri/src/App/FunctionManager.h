@@ -45,6 +45,8 @@ namespace FunctionManager {
 	
 	void Invoke(const std::string& name, FunctionArguments args, FunctionResultType* result = NULL);
 	void Invoke(const std::string& data, FunctionResultType* result = NULL);
+
+	void InvokeJavascriptFunction(const std::string& name, FunctionArguments args);
 }
 
 #endif

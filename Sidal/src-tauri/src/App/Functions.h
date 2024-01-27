@@ -17,6 +17,6 @@
 
 #include "FunctionManager.h"
 
-void SayHi(FunctionManager::FunctionArguments args, FunctionManager::FunctionResult result);
+void Login(FunctionManager::FunctionArguments args, FunctionManager::FunctionResult result);
 
 #endif

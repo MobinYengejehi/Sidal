@@ -17,8 +17,8 @@
 using FunctionManager::FunctionArguments;
 using FunctionManager::FunctionResult;
 
-void SayHi(FunctionArguments args, FunctionResult result) {
+void Login(FunctionArguments args, FunctionResult result) {
 	std::cout << "hi to js from cpp : " << args << std::endl;
 
-	result[0] = "this is a test string from cpp!";
+	result = "come on honey!";
 }

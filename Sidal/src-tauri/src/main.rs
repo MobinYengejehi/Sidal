@@ -44,19 +44,17 @@ fn CallCFunction(jsonDocument : &str) -> String {
 }
 
 #[no_mangle]
-pub extern "C" fn CallJavascriptFunction(jsonDocumentRaw : *const c_char) {
+pub extern "C" fn ExecuteJavascriptCode(jsonDocumentRaw : *const c_char) {
     let jsonDocument : &str = &unsafe { CStr::from_ptr(jsonDocumentRaw as *const _) }.to_string_lossy();
 
     unsafe {
         match &MainWindow {
             Some(window) => {
-                window.eval("window.givemsg('hi this is a cpp msg')");
+                window.eval(jsonDocument);
             },
             None => {}
         }
     }
-
-    println!("json document is : {}", jsonDocument);
 }
 
 fn main() {
@@ -64,7 +62,6 @@ fn main() {
 
     tauri::Builder::default()
         .on_page_load(move | window, _ | {
-            // window.eval("alert('hi this is rust!')");
             unsafe { MainWindow.insert(window) };
         })
         .invoke_handler(tauri::generate_handler![CallCFunction])
@@ -73,38 +70,3 @@ fn main() {
 
     unsafe { application_cleanup() };
 }
-
-/*use std::ffi::c_void;
-use std::ffi::CStr;
-
-extern "C" {
-    fn CppAllocate(size : u32) -> *mut c_void;
-
-    fn CppFree(ptr : *mut c_void);
-
-    fn GetCNumber() -> i32;
-}
-
-#[tauri::command]
-fn greet(name: &str) -> String {
-    let s : String = String::from("slam chetori?");
-
-    println!("rust str is : {}", s);
-
-    let ptr : *mut c_void = unsafe { CppAllocate(100) };
-
-    let cstr : &str = &unsafe { CStr::from_ptr(ptr as *const _) }.to_string_lossy();
-    println!("cstring is : {}", cstr);
-
-    unsafe { CppFree(ptr) };
-    
-    return format!("rust says 2: {} | numb : {} | and c str : {}", name, unsafe { GetCNumber() }, cstr);
-}
-
-fn main() {
-    tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![greet])
-        .run(tauri::generate_context!())
-        .expect("error while running tauri application");
-}
-*/

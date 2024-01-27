@@ -17,14 +17,11 @@
 
 #include "Utilities.h"
 
+#define JAVACRIPT_FUNCTION_MANAGER_INVOKER "__FUNCTION_MANAGER_INVOKE_JAVASCRIPT_FUNCTION__"
+
 std::unordered_map<std::string, FunctionManager::FunctionType> Functions;
 
-#include <iostream>
-
-extern "C" {
-	void CallJavascriptFunction(const char* jsonDocument);
-	//CallJavascriptFunction("salam chetori khobi in cpp ie!");
-}
+IMPORT_INTERNAL void ExecuteJavascriptCode(const char* jsonDocument);
 
 EXPORT_INTERNAL void* call_c_function(const char* data) {
 	FunctionManager::FunctionResultType result;
@@ -132,4 +129,26 @@ void FunctionManager::Invoke(const std::string& data, FunctionResultType* result
 	FunctionResultType res = FunctionResultType(Json::arrayValue);
 
 	function(args, res);
+}
+
+void FunctionManager::InvokeJavascriptFunction(const std::string& name, FunctionArguments args) {
+	if (name.empty()) {
+		return;
+	}
+
+	Json::Value data;
+	
+	data[0] = name;
+	data[1] = args;
+
+	std::string jsonDocument;
+	JsonStringify(data, &jsonDocument);
+
+	std::string code = "window.";
+	code += JAVACRIPT_FUNCTION_MANAGER_INVOKER;
+	code += "(`";
+	code += jsonDocument;
+	code += "`);";
+
+	ExecuteJavascriptCode(code.c_str());
 }

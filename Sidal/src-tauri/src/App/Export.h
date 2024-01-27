@@ -16,5 +16,6 @@
 #define EXPORT_HEADER
 
 #define EXPORT_INTERNAL extern "C"
+#define IMPORT_INTERNAL extern "C"
 
 #endif
