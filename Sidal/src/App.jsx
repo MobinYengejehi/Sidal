@@ -1,7 +1,12 @@
 import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import { invoke } from "@tauri-apps/api/tauri";
+import { message } from "@tauri-apps/api/dialog";
 import "./App.css";
+
+window.givemsg = async function(msg) {
+  await message(msg);
+}
 
 function App() {
   const [greetMsg, setGreetMsg] = useState("");
@@ -9,12 +14,26 @@ function App() {
 
   async function greet() {
     // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    setGreetMsg(await invoke("greet", { name }));
+    try{
+      
+      const jsonDocument = JSON.stringify([
+        "SayHi",
+        [
+          "salam chetori in javascritp e hahahah",
+          "another hahahaha"
+        ]
+      ]);
+
+      setGreetMsg(await invoke("CallCFunction", { jsonDocument }));
+      await message("got data from backend!");
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   return (
     <div className="container">
-      <h1>Welcome to Tauri!</h1>
+      <h1>Welcome to Sidal!</h1>
 
       <div className="row">
         <a href="https://vitejs.dev" target="_blank">

@@ -11,9 +11,9 @@
   },
   "tauri": {
     "allowlist": {
-      "all": false,
+      "all": true,
       "shell": {
-        "all": false,
+        "all": true,
         "open": true
       }
     },
@@ -21,6 +21,9 @@
       "active": true,
       "targets": "all",
       "identifier": "com.sidal.dev",
+      "resources": [
+        "./libcurl.dll"
+      ],
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
